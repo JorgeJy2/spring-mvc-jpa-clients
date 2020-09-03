@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head">
+</head>
+<body>
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container mt-5">
+		<h1 class="text-primary" th:text="${title}">Insert title here</h1>
+		<img th:if="${#strings.length(client.picture) > 0}" class="img-thumbnail rounded float-left" style="max-width: 25%"
+			th:src="@{'/upload/'+ ${client.picture}}" th:alt="${client.picture}" />
+		<ul class="list-group">
+			<li class="list-group-item" th:text="${client.name}"></li>
+			<li class="list-group-item" th:text="${client.firstName}"></li>
+			<li class="list-group-item" th:text="${client.email}"></li>
+			<li class="list-group-item" th:text="${client.createAt}"></li>
+		</ul>	
+		<a th:href="@{/list}">
+		<button type="button" class="btn btn-primary btn-block mt-3" >
+			go list		
+		</button>
+		</a>
+	</div>
+
+
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

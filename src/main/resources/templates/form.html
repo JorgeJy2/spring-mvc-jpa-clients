@@ -14,7 +14,7 @@
 				<li th:each="error: ${#fields.errors('*')}" th:text="${error}"></li>
 			</ul>
 		</div>
-		<form th:action="@{/form}" th:object="${client}" method="post">
+		<form th:action="@{/form}" th:object="${client}" method="post" enctype="multipart/form-data">
 			<div class="form-group">
 				<label for="nameClient">Name</label> 
 				<input type="text" class="form-control"
@@ -41,6 +41,15 @@
 				 <small id="emailHelp" class="form-text text-muted">yyyy-MM-dd</small>
 				 <small th:if="${#fields.hasErrors('createAt')}" th:errors="*{createAt}" class="form-text text-danger"></small>
 			</div>
+			
+			
+			<div class="form-group">
+				<label for="pictureClient">Picture</label> 
+				<input type="file" class="form-control" name="file"
+					 id="pictureClient">
+				
+			</div>
+			
 			<button type="submit" class="btn btn-primary">Save!</button>
 		</form>
 
