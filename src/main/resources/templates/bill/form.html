@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head">
+</head>
+<body>
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container mt-5">
+
+		<a class="btn btn-secondary btn-xs"
+			th:href="@{/show/} + ${bill.client.id}">&laquo; Go back</a>
+		<h1 class="text-primary" th:text="${title}">Insert title here</h1>
+		<div th:object="${bill}" th:remove="tag">
+			<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+				<li th:each="error: ${#fields.errors('*')}" th:text="${error}"></li>
+			</ul>
+		</div>
+		<form th:action="@{/bill/form}" th:object="${bill}" method="post">
+			<div class="form-group">
+				<label for="nameDescription">Description</label> <input type="text"
+					class="form-control" id="nameDescription" th:field="*{description}"
+					th:errorclass="'form-control alert-danger'"> <small
+					th:if="${#fields.hasErrors('description')}"
+					th:errors="*{description}" class="form-text text-danger"></small>
+			</div>
+			<div class="form-group">
+				<label for="observation">Observation</label>
+				<textarea class="form-control" id="observation"
+					th:field="*{observation}"
+					th:errorclass="'form-control alert-danger'"></textarea>
+				<small th:if="${#fields.hasErrors('observation')}"
+					th:errors="*{observation}" class="form-text text-danger"></small>
+			</div>
+
+			<div class="form-group">
+				<label for="search_product">Search product</label> <input
+					type="text" class="form-control" name="search_product"
+					id="search_product">
+			</div>
+
+			<table th:replace="bill/template-products ::products-bill"></table>
+
+			<table id="loadProducts"
+				class="table table-sm table-striped table-hover">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Price</th>
+						<th>Quantity</th>
+						<th>Total</th>
+						<th>Delete</th>
+					</tr>
+				</thead>
+				<tbody>
+
+				</tbody>
+			</table>
+			<h5>
+				<span class="badge badge-secondary" id="total_value">0</span>
+			</h5>
+
+			<button type="submit" class="btn btn-primary">Save!</button>
+		</form>
+
+	</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+	<script th:replace="bill/js/autocomplete-products :: search-javascript"></script>
+</body>
+</html>

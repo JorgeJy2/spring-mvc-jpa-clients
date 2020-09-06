@@ -18,6 +18,7 @@
 				<th>FirstName</th>
 				<th>Email</th>
 				<th>Date</th>
+				<th>Add bill</th>
 				<th>Edit</th>
 			</tr>
 		</thead>
@@ -30,6 +31,7 @@
 				<td th:text="${client.firstName}"></td>
 				<td th:text="${client.email}"></td>
 				<td th:text="${client.createAt}"></td>
+				<td><a class="btn btn-success btn-xs" th:href="@{/bill/form/} + ${client.id}">Add bill</a></td>
 				<td><a class="btn btn-primary btn-xs" th:href="@{/form/} + ${client.id}">Edit</a></td>
 				<td><a class="btn btn-danger btn-xs" onclick="return confirm('You want delete?');" th:href="@{/delete/} + ${client.id}">Delete</a></td>
 				

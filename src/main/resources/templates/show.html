@@ -7,18 +7,56 @@
 
 	<div class="container mt-5">
 		<h1 class="text-primary" th:text="${title}">Insert title here</h1>
-		<img th:if="${#strings.length(client.picture) > 0}" class="img-thumbnail rounded float-left" style="max-width: 25%"
+		<img th:if="${#strings.length(client.picture) > 0}"
+			class="img-thumbnail rounded float-left" style="max-width: 25%"
 			th:src="@{'/upload/'+ ${client.picture}}" th:alt="${client.picture}" />
 		<ul class="list-group">
 			<li class="list-group-item" th:text="${client.name}"></li>
 			<li class="list-group-item" th:text="${client.firstName}"></li>
 			<li class="list-group-item" th:text="${client.email}"></li>
 			<li class="list-group-item" th:text="${client.createAt}"></li>
-		</ul>	
+		</ul>
+
+
+		<a th:href="@{/bill/form/} + ${client.id}">
+			<button type="button" class="btn btn-success btn-block mt-3">
+				Add bill</button>
+		</a>
+
+		<div th:if="${#lists.isEmpty(client.bills)}"
+			class="alert alert-info my-4" th:text="'Client have not bills.'"></div>
+		<table th:if="${not #lists.isEmpty(client.bills)}"
+			class="table table-bordered table-striped my-4">
+			<thead class="thead-dark">
+				<tr>
+					<th>Invoice</th>
+					<th>Description</th>
+					<th>Date</th>
+					<th>Total</th>
+					<th>Details</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="bill: ${client.bills}">
+					<td th:text="${bill.id}"></td>
+					<td th:text="${bill.description}"></td>
+					<td th:text="${bill.createAt}"></td>
+					<td th:text="${bill.total}"></td>
+					<td><a th:href="@{'/bill/show/'+${bill.id}}"
+						class="btn btn-primary btn-xs">Details</a></td>
+						<td><a th:href="@{'/bill/delete/'+${bill.id}}"
+						onclick="return confirm('You want delete bill?');"
+						class="btn btn-danger btn-xs">Delete</a></td>
+
+				</tr>
+			</tbody>
+
+		</table>
+
 		<a th:href="@{/list}">
-		<button type="button" class="btn btn-primary btn-block mt-3" >
-			go list		
-		</button>
+			<button type="button" class="btn btn-primary btn-block mt-3">
+				Go list</button>
 		</a>
 	</div>
 
