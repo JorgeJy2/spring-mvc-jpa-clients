@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +25,7 @@ import com.jorgejy.springboot.app.model.entity.Product;
 import com.jorgejy.springboot.app.model.service.BillService;
 import com.jorgejy.springboot.app.model.service.ClientService;
 import com.jorgejy.springboot.app.model.service.ProductService;
-
+@Secured("ROLE_ADMIN")
 @Controller
 @RequestMapping("/bill")
 @SessionAttributes("bill")
@@ -102,7 +103,8 @@ public class BillController {
 	public String showBill(@PathVariable Long id,
 			Model model, RedirectAttributes flash) {
 		
-		Bill bill = billService.findBillById(id);
+		//Bill bill = billService.findBillById(id);
+		Bill bill = billService.fetchByIdWithClientWithItemBillWithProduct(id);
 		
 		if(bill == null) {
 			flash.addFlashAttribute("danger", "The bill no exist.");

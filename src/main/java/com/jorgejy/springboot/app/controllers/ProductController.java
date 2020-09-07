@@ -3,6 +3,7 @@ package com.jorgejy.springboot.app.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jorgejy.springboot.app.model.entity.Product;
 import com.jorgejy.springboot.app.model.service.ProductService;
-
+@Secured("ROLE_ADMIN")
 @Controller
 @RequestMapping("product")
 public class ProductController {

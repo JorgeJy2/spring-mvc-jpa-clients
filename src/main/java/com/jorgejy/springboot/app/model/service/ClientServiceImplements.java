@@ -46,5 +46,11 @@ public class ClientServiceImplements implements ClientService {
 	public Page<Client> findAll(Pageable pageable) {
 		return clientDao.findAll(pageable);
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Client fetchByIdWithBills(Long id) {
+		return clientDao.fetchByIdWithBills(id);
+	}
 	
 }

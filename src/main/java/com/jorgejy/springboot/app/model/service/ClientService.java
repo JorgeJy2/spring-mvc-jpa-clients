@@ -14,5 +14,5 @@ public interface ClientService {
 	public Page<Client> findAll(Pageable pageable);
 	public void save(Client client);
 	public void delete(Long id);
-
+	public Client fetchByIdWithBills(Long id);
 }

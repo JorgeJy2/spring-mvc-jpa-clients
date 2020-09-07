@@ -31,5 +31,10 @@ public class BillServiceImplements implements BillService {
 	public void delete(Long id) {
 		billDao.deleteById(id);
 	}
+
+	@Override
+	public Bill fetchByIdWithClientWithItemBillWithProduct(Long id) {
+		return billDao.fetchByIdWithClientWithItemBillWithProduct(id);
+	}
 	
 }

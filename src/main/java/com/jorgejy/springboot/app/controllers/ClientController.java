@@ -2,10 +2,14 @@ package com.jorgejy.springboot.app.controllers;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Collection;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -13,6 +17,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,6 +44,7 @@ import com.jorgejy.springboot.app.model.service.ClientService;
 import com.jorgejy.springboot.app.model.service.UploadFileService;
 import com.jorgejy.springboot.app.util.paginator.PageRender;
 
+
 @Controller
 @SessionAttributes("client")
 public class ClientController {
@@ -41,7 +54,10 @@ public class ClientController {
 
 	@Autowired
 	private UploadFileService uploadFileService;
-
+	
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+	
+	@Secured("ROLE_USER")
 	@GetMapping(value = "/upload/{filename:.+}")
 	public ResponseEntity<Resource> showPicture(@PathVariable String filename) {
 		Resource resource = null;
@@ -54,12 +70,15 @@ public class ClientController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
 				.body(resource);
 	}
-
+	// one role hasRole('ROLE_ADMIN')
+	// hasAnyRole('ROLE_ADMIN', 'ROLE_USER')
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping(value = "/show/{id}")
 	public String showClient(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 		Client client;
 		if (id > 0) {
-			client = clientService.findOne(id);
+			// client = clientService.findOne(id);
+			client = clientService.fetchByIdWithBills(id);
 			if (client == null) {
 				flash.addFlashAttribute("danger", "Client no exist.");
 				return "redirect:/list";
@@ -75,9 +94,45 @@ public class ClientController {
 		return "show";
 	}
 
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String list(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+	@RequestMapping(value = {"/list", "/"}, method = RequestMethod.GET)
+	public String list(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
+			Authentication authentication, 
+			HttpServletRequest httpServletRequest) {
+		
+		Authentication authenticationStatic = SecurityContextHolder.getContext().getAuthentication();
+		
+		
+		if(authentication != null) {
+			logger.info("Your user name is: ".concat(authentication.getName()));
+		}
 
+		if(authenticationStatic != null) {
+			logger.info("Your user  name is: ".concat(authenticationStatic.getName()).concat(" static."));
+		}
+
+		if(hasRole("ROLE_ADMIN")) {
+			logger.info("ROLE ADMIN! ".concat(authentication.getName()));
+		} else {
+			logger.info("USER NOT IS ROLE ADMIN! ".concat(authentication.getName()));
+		}
+		
+		SecurityContextHolderAwareRequestWrapper awareRequestWrapper = new SecurityContextHolderAwareRequestWrapper(httpServletRequest, "ROLE_");
+		
+		if(awareRequestWrapper.isUserInRole("ADMIN")) {
+			logger.info("ROLE ADMIN USE SecurityContextHolderAwareRequestWrapper! ".concat(authentication.getName()));
+		} else {
+			logger.info("USER NOT IS ROLE ADMIN use SecurityContextHolderAwareRequestWrapper! ".concat(authentication.getName()));
+		}	
+		
+		
+		if(httpServletRequest.isUserInRole("ADMIN")) {
+			logger.info("ROLE ADMIN USE httpServletRequest! ".concat(authentication.getName()));
+		} else {
+			logger.info("USER NOT IS ROLE ADMIN use httpServletRequest! ".concat(authentication.getName()));
+		}	
+		
+		
+		
 		Pageable pageable = PageRequest.of(page, 5);
 		Page<Client> clients = clientService.findAll(pageable);
 		PageRender<Client> pageRender = new PageRender<>("/list", clients);
@@ -88,7 +143,8 @@ public class ClientController {
 
 		return "list";
 	}
-
+	// more roles validate example {"ROLE_ADMIN", "ROLE_USER"}.
+	@Secured({"ROLE_ADMIN"})
 	@GetMapping("/form")
 	public String create(Map<String, Object> model) {
 		Client client = new Client();
@@ -99,6 +155,7 @@ public class ClientController {
 		return "form";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@GetMapping("/form/{id}")
 	public String edit(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 		Client client = null;
@@ -171,5 +228,36 @@ public class ClientController {
 			}
 		}
 		return "redirect:/list";
+	}
+	
+	public boolean hasRole(String roleName) {
+		
+		SecurityContext securityContext = SecurityContextHolder.getContext(); 
+		
+		if(securityContext == null) {
+			return false;
+		}
+		
+		Authentication authentication = securityContext.getAuthentication();
+		if(authentication == null) {
+			return false;
+		}
+		
+		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+		return authorities.contains(new SimpleGrantedAuthority(roleName));
+		
+		
+		
+		/*for(GrantedAuthority authority : authorities) {
+			if(roleName.equals(authority.getAuthority())) {
+				logger.info("User : ".concat(authentication.getName()).concat(" role is:  ").concat(roleName));
+				return true;
+			}
+		}
+		
+		return false;
+		
+		*/
+		
 	}
 }

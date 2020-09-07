@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layout/layout :: head">
+</head>
+<body>
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container mt-5">
+		<div class="card bg-danger text-white text-center">
+			<div class="card-header">Access denied</div>
+			<div class="card-body">
+				<h5 class="card-title">
+					User <span sec:authentication="name">Bob</span> you do not have
+					permission to access this resource.
+				</h5>
+				<a th:href="@{/list}" class="btn btn-outline-light" role="button">Go to home</a>
+			</div>
+		</div>
+	</div>
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>
