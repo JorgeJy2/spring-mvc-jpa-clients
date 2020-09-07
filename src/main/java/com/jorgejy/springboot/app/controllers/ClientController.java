@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +39,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 import com.jorgejy.springboot.app.model.entity.Client;
 import com.jorgejy.springboot.app.model.service.ClientService;
@@ -72,7 +74,7 @@ public class ClientController {
 	}
 	// one role hasRole('ROLE_ADMIN')
 	// hasAnyRole('ROLE_ADMIN', 'ROLE_USER')
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping(value = "/show/{id}")
 	public String showClient(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 		Client client;
@@ -99,36 +101,35 @@ public class ClientController {
 			Authentication authentication, 
 			HttpServletRequest httpServletRequest) {
 		
-		Authentication authenticationStatic = SecurityContextHolder.getContext().getAuthentication();
-		
-		
+
 		if(authentication != null) {
-			logger.info("Your user name is: ".concat(authentication.getName()));
+			logger.info("USER SIGN IN , USER NAME: ".concat(authentication.getName()));
 		}
 
-		if(authenticationStatic != null) {
-			logger.info("Your user  name is: ".concat(authenticationStatic.getName()).concat(" static."));
-		}
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
+		if(auth != null) {
+			logger.info("STATIC  SecurityContextHolder.getContext().getAuthentication(): USER NAME: ".concat(auth.getName()));
+		}
+		
 		if(hasRole("ROLE_ADMIN")) {
-			logger.info("ROLE ADMIN! ".concat(authentication.getName()));
+			logger.info("USER NAME ".concat(auth.getName()).concat(" YOU HAVE ACCESS!"));
 		} else {
-			logger.info("USER NOT IS ROLE ADMIN! ".concat(authentication.getName()));
+			logger.info("USER NAME ".concat(auth.getName()).concat(" ACCES DENIED"));
 		}
 		
-		SecurityContextHolderAwareRequestWrapper awareRequestWrapper = new SecurityContextHolderAwareRequestWrapper(httpServletRequest, "ROLE_");
+		SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(httpServletRequest, "");
 		
-		if(awareRequestWrapper.isUserInRole("ADMIN")) {
-			logger.info("ROLE ADMIN USE SecurityContextHolderAwareRequestWrapper! ".concat(authentication.getName()));
+		if(securityContext.isUserInRole("ROLE_ADMIN")) {
+			logger.info("USE SecurityContextHolderAwareRequestWrapper: USER NAME: ".concat(auth.getName()).concat(" YOU HAVE ACCESS"));
 		} else {
-			logger.info("USER NOT IS ROLE ADMIN use SecurityContextHolderAwareRequestWrapper! ".concat(authentication.getName()));
-		}	
-		
-		
-		if(httpServletRequest.isUserInRole("ADMIN")) {
-			logger.info("ROLE ADMIN USE httpServletRequest! ".concat(authentication.getName()));
+			logger.info("USE SecurityContextHolderAwareRequestWrapper: USER NAME: ".concat(auth.getName()).concat(" ACCESS DENIED"));
+		}
+
+		if(httpServletRequest.isUserInRole("ROLE_ADMIN")) {
+			logger.info("USE HttpServletRequest: USER NAME ".concat(auth.getName()).concat(" YOU HAVE ACCESS"));
 		} else {
-			logger.info("USER NOT IS ROLE ADMIN use httpServletRequest! ".concat(authentication.getName()));
+			logger.info("USE HttpServletRequest: USER NAME ".concat(auth.getName()).concat(" ACCESS DENIED"));
 		}	
 		
 		
