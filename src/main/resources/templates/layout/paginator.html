@@ -4,13 +4,14 @@
 <body>
 	<nav th:fragment="paginator">
 		<ul class="pagination">
-			<li class="page-item" th:class="${page.first ? 'page-item disabled' : 'page-item'}"><span th:if="${page.first}" class="page-link">Primera
+			<li class="page-item" th:class="${page.first ? 'page-item disabled' : 'page-item'}"><span th:if="${page.first}" class="page-link"
+			th:text="#{text.paginator.first}" >Primera
 			</span> <a class="page-link" th:if="${not page.first}"
-				th:href="@{${page.url}(page=0)}">Primera </a></li>
+				th:href="@{${page.url}(page=0)}" th:text="#{text.paginator.first}">Primera </a></li>
 			<li class="page-item" th:class="${not page.hasPrevious ? 'page-item disabled' : 'page-item'}">
-				<span th:if="${not page.hasPrevious}" class="page-link">&laquo;
+				<span th:if="${not page.hasPrevious}" class="page-link" th:utext="#{text.paginator.previous}">&laquo;
 			</span> <a class="page-link" th:if="${page.hasPrevious}"
-				th:href="@{${page.url}(page=${page.currentPage -2 })}">&laquo;
+				th:href="@{${page.url}(page=${page.currentPage -2 })}" th:utext="#{text.paginator.previous}">&laquo;
 			</a></li>
 			<li class="page-item" th:each="pageItem: ${page.pages}" th:class="${pageItem.current ? 'page-item active': ' page-item'}"><span
 				th:if="${pageItem.current}" th:text="${pageItem.number}" class="page-link"></span> <a
@@ -19,16 +20,16 @@
 				th:text="${pageItem.number}"></a></li>
 
 			<li class="page-item" th:class="${not page.hasNext ? 'page-item disabled' : 'page-item'}">
-				<span th:if="${not page.hasNext}" class="page-link">&raquo; </span>
+				<span th:if="${not page.hasNext}" class="page-link" th:utext="#{text.paginator.next}">&raquo; </span>
 				<a class="page-link" th:if="${page.hasNext}"
-				th:href="@{${page.url}(page=${page.currentPage})}">&raquo; </a>
+				th:href="@{${page.url}(page=${page.currentPage})}" th:utext="#{text.paginator.next}">&raquo; </a>
 			</li>
 
 
 			<li class="page-item" th:class="${ page.last ? 'page-item disabled' : 'page-item'}">
-				<span th:if="${page.last}" class="page-link">&Uacute;ltima
+				<span th:if="${page.last}" class="page-link" th:text="#{text.paginator.last}">&Uacute;ltima
 			</span> <a class="page-link" th:if="${not page.last}"
-				th:href="@{${page.url}(page=${page.totalPages-1})}">&Uacute;ltima </a></li>
+				th:href="@{${page.url}(page=${page.totalPages-1})}" th:text="#{text.paginator.last}">&Uacute;ltima </a></li>
 
 		</ul>
 

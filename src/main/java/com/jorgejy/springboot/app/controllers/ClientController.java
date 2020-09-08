@@ -3,6 +3,7 @@ package com.jorgejy.springboot.app.controllers;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.core.io.Resource;
 
 import org.springframework.data.domain.Page;
@@ -57,6 +59,9 @@ public class ClientController {
 	@Autowired
 	private UploadFileService uploadFileService;
 	
+	@Autowired
+	private MessageSource messageSource;
+	
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Secured("ROLE_USER")
@@ -99,7 +104,8 @@ public class ClientController {
 	@RequestMapping(value = {"/list", "/"}, method = RequestMethod.GET)
 	public String list(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
 			Authentication authentication, 
-			HttpServletRequest httpServletRequest) {
+			HttpServletRequest httpServletRequest,
+			Locale locale) {
 		
 
 		if(authentication != null) {
@@ -138,7 +144,7 @@ public class ClientController {
 		Page<Client> clients = clientService.findAll(pageable);
 		PageRender<Client> pageRender = new PageRender<>("/list", clients);
 
-		model.addAttribute("title", "get all clients.");
+		model.addAttribute("title", messageSource.getMessage("text.client.list.title", null, locale));
 		model.addAttribute("clients", clients);
 		model.addAttribute("page", pageRender);
 

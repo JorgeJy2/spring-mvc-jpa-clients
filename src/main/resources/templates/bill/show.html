@@ -12,6 +12,11 @@
 		<h4>
 			<a th:href="@{'/show/' + ${bill.client.id}}"
 				class="btn btn-light btn-xs">&laquo; return</a>
+				
+			<a th:href="@{'/bill/show/' + ${bill.client.id}(format=pdf)}"
+				class="btn btn-danger btn-xs float-right">PDF</a>
+				<a th:href="@{'/bill/show/' + ${bill.client.id}(format=xlsx)}"
+				class="btn btn-success btn-xs float-right mx-2">Excel</a>
 		</h4>
 
 		<ul class="list-group my-2">
