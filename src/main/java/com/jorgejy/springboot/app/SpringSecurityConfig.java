@@ -3,6 +3,7 @@ package com.jorgejy.springboot.app;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.jorgejy.springboot.app.auth.handler.LoginSuccessHandler;
+import com.jorgejy.springboot.app.model.service.JpaUserDetailsService;
 
  
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
@@ -29,6 +31,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private DataSource dataSource;
 
+	@Autowired
+	private JpaUserDetailsService jpaUserDetailsService; 
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
@@ -43,12 +47,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		 */	
 		
 		
-		  authenticationManagerBuilder.jdbcAuthentication() .dataSource(dataSource)
-		  .passwordEncoder(passwordEncoderDI)
-		  .usersByUsernameQuery("select username, password, enabled from users where username=?"
-		  )
-		  .authoritiesByUsernameQuery("select u.username, a.authority from authorities a inner join users u on (a.user_id=u.id) where u.username=?"
-		  );
+		/*
+		 * authenticationManagerBuilder.jdbcAuthentication() .dataSource(dataSource)
+		 * .passwordEncoder(passwordEncoderDI)
+		 * .usersByUsernameQuery("select username, password, enabled from users where username=?"
+		 * )
+		 * .authoritiesByUsernameQuery("select u.username, a.authority from authorities a inner join users u on (a.user_id=u.id) where u.username=?"
+		 * );
+		 */
+		
+		
+		authenticationManagerBuilder.userDetailsService(jpaUserDetailsService).passwordEncoder(passwordEncoderDI);
 		
 	}
 
