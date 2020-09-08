@@ -7,11 +7,11 @@
 
 	<div class="container mt-5">
 
-		<h1 class="text-primary" th:text="${title}">Insert title here</h1>
+		<h1 class="text-primary" th:text="#{text.bill.show.bill}">Insert title here</h1>
 
 		<h4>
 			<a th:href="@{'/show/' + ${bill.client.id}}"
-				class="btn btn-light btn-xs">&laquo; return</a>
+				class="btn btn-light btn-xs">&laquo; <span th:text="#{text.button.return}"></span></a>
 				
 			<a th:href="@{'/bill/show/' + ${bill.client.id}(format=pdf)}"
 				class="btn btn-danger btn-xs float-right">PDF</a>
@@ -20,19 +20,19 @@
 		</h4>
 
 		<ul class="list-group my-2">
-			<li th:text="'Client info'"
+			<li th:text="#{text.bill.show.client}"
 				class="list-group-item list-group-item-primary"></li>
 			<li class="list-group-item" th:text="${bill.client}"></li>
 			<li class="list-group-item" th:text="${bill.client.email}"></li>
 		</ul>
 
 		<ul class="list-group">
-			<li th:text="'Bill info'"
+			<li th:text="#{text.bill.show.bill}"
 				class="list-group-item list-group-item-success"></li>
-			<li class="list-group-item" th:text="'ID: '+${bill.id}">
+			<li class="list-group-item" th:text="#{text.bill.folio}+': '+${bill.id}">
 			<li class="list-group-item"
-				th:text="'Description: '+${bill.description}">
-			<li class="list-group-item" th:text="'Date: '+${bill.createAt}">
+				th:text="#{text.bill.description}+': '+${bill.description}">
+			<li class="list-group-item" th:text="#{text.bill.date}+ ': '+${bill.createAt}">
 		</ul>
 		
 		<div class="alert alert-info my-4" th:if="${#lists.isEmpty(bill.items)}" th:text="Bill no have products."></div>
@@ -41,10 +41,10 @@
 		<table th:if="${not #lists.isEmpty(bill.items)}" class="table table-striped table-hover table-bordered my-3">
 			<thead>
 				<tr>
-					<th>Product</th>
-					<th>Price</th>
-					<th>Quantity</th>
-					<th>Total</th>
+					<th th:text="#{text.bill.products.id}">Product</th>
+					<th th:text="#{text.bill.products.price}">Price</th>
+					<th th:text="#{text.bill.products.quantity}">Quantity</th>
+					<th th:text="#{text.bill.products.total}">Total</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -58,10 +58,12 @@
 			</tbody>
 		</table>
 		
-		<h5 class="float-right">Total <span th:text="${bill.total}" class="badge badge-secondary"></span></h5>
+		<h5 class="float-right">
+		<span th:text="#{text.bill.products.total}"></span>
+		 <span th:text="${bill.total}" class="badge badge-secondary"></span></h5>
 		
 		<div class="card border-info  mb-4" style="max-width: 20rem;">
-			<div class="card-header">Observations</div>
+			<div class="card-header" th:text="#{text.bill.observations}">Observations</div>
 			<div class="card-body">
 				<p class="card-text" th:text="${bill.observation}" th:if="${not #strings.isEmpty(bill.observation)}"></p>
 				<p class="card-text" th:if="${#strings.isEmpty(bill.observation)}">Bill not have observations.</p>
@@ -71,7 +73,7 @@
 		
 		<h4>
 			<a th:href="@{'/show/' + ${bill.client.id}}"
-				class="btn btn-light btn-xs">&laquo; return</a>
+				class="btn btn-light btn-xs">&laquo; <span th:text="#{text.button.return}"></span></a>
 		</h4>
 	</div>
 
