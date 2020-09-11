@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "bills")
@@ -84,6 +85,8 @@ public class Bill implements Serializable {
 		this.createAt = createAt;
 	}
 
+	//XmlTransient no join and clean infinity loop
+	@XmlTransient
 	public Client getClient() {
 		return client;
 	}

@@ -15,9 +15,7 @@ import org.supercsv.prefs.CsvPreference;
 import com.jorgejy.springboot.app.model.entity.Client;
 
 @Component("list.csv")
-public class ClientCsvView extends AbstractView {
-
-	
+public class ClientCsvView extends AbstractView {	
 	
 	public ClientCsvView() {
 	 setContentType("text/csv");
