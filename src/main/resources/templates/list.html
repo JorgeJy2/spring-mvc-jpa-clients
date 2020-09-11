@@ -1,47 +1,58 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="layout/layout :: head">
 </head>
 <body>
 	<header th:replace="layout/layout :: header"></header>
 
 	<div class="container mt-5">
-	
-	
-	<h1 class="text-primary" th:text="${title}">Insert title here</h1>
 
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th sec:authorize="hasRole('ROLE_USER')">ID</th>
-				<th th:text="#{text.client.name}">Name</th>
-				<th th:text="#{text.client.firstName}">FirstName</th>
-				<th th:text="#{text.client.email}">Email</th>
-				<th th:text="#{text.client.createAt}">Date</th>
-				<th sec:authorize="hasRole('ROLE_ADMIN')">Add bill</th>
-				<th sec:authorize="hasRole('ROLE_ADMIN')">Edit</th>
-				<th sec:authorize="hasRole('ROLE_ADMIN')">Delete</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="client: ${clients}">
-				<td sec:authorize="hasRole('ROLE_USER')">
-					<a class="btn btn-primary btn-xs" th:href="@{/show/}+ ${client.id}" th:text="${client.id}"></a>
-				</td>
-				<td th:text="${client.name}"></td>
-				<td th:text="${client.firstName}"></td>
-				<td th:text="${client.email}"></td>
-				<td th:text="${client.createAt}"></td>
-				<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-success btn-xs" th:href="@{/bill/form/} + ${client.id}">Add bill</a></td>
-				<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-xs" th:href="@{/form/} + ${client.id}">Edit</a></td>
-				<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-danger btn-xs" onclick="return confirm('You want delete?');" th:href="@{/delete/} + ${client.id}">Delete</a></td>
-				
-			</tr>
-		</tbody>
-	</table>
-	<nav th:replace="layout/paginator :: paginator"></nav>
+
+		<h1 class="text-primary" th:text="${title}">Insert title here</h1>
+
+		<h4 class="my-3">
+			<a th:href="@{'/list'(format=csv)}"
+				class="btn btn-success btn-xs float-right mx-2">CSV</a>
+		</h4>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th sec:authorize="hasRole('ROLE_USER')">ID</th>
+					<th th:text="#{text.client.name}">Name</th>
+					<th th:text="#{text.client.firstName}">FirstName</th>
+					<th th:text="#{text.client.email}">Email</th>
+					<th th:text="#{text.client.createAt}">Date</th>
+					<th sec:authorize="hasRole('ROLE_ADMIN')">Add bill</th>
+					<th sec:authorize="hasRole('ROLE_ADMIN')">Edit</th>
+					<th sec:authorize="hasRole('ROLE_ADMIN')">Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="client: ${clients}">
+					<td sec:authorize="hasRole('ROLE_USER')"><a
+						class="btn btn-primary btn-xs" th:href="@{/show/}+ ${client.id}"
+						th:text="${client.id}"></a></td>
+					<td th:text="${client.name}"></td>
+					<td th:text="${client.firstName}"></td>
+					<td th:text="${client.email}"></td>
+					<td th:text="${client.createAt}"></td>
+					<td sec:authorize="hasRole('ROLE_ADMIN')"><a
+						class="btn btn-success btn-xs"
+						th:href="@{/bill/form/} + ${client.id}">Add bill</a></td>
+					<td sec:authorize="hasRole('ROLE_ADMIN')"><a
+						class="btn btn-primary btn-xs" th:href="@{/form/} + ${client.id}">Edit</a></td>
+					<td sec:authorize="hasRole('ROLE_ADMIN')"><a
+						class="btn btn-danger btn-xs"
+						onclick="return confirm('You want delete?');"
+						th:href="@{/delete/} + ${client.id}">Delete</a></td>
+
+				</tr>
+			</tbody>
+		</table>
+		<nav th:replace="layout/paginator :: paginator"></nav>
 	</div>
-	
+
 	<footer th:replace="layout/layout :: footer"></footer>
 </body>
 </html>
