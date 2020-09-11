@@ -22,6 +22,9 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "clients")
 public class Client implements Serializable {
@@ -48,10 +51,12 @@ public class Client implements Serializable {
 	@Column(name = "create_at") // Format date.
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date createAt;
 
 	private String picture;
 	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference	
 	private List<Bill> bills;
 
 	private static final long serialVersionUID = 1L;

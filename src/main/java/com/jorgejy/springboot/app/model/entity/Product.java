@@ -13,6 +13,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "products")
 public class Product implements Serializable {
@@ -26,6 +28,7 @@ public class Product implements Serializable {
 	private Double price;
 	@Temporal(TemporalType.DATE)
 	@Column(name = "create_at")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date createAt;
 
 	@PrePersist
