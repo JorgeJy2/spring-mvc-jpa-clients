@@ -7,11 +7,11 @@
 
 	<div class="container mt-5">
 		<div class="card border-primary text-center">
-			<div class="card-header">Sing In</div>
+			<div class="card-header" th:text="#{text.login.title}">Sing In</div>
 			<div class="card-body">
 				<form th:action="@{/login}" method="post">
 					<div class="form-group">
-						<label for="username">User</label> <input type="text"
+						<label for="username" th:text="#{text.login.user}" >User</label> <input type="text"
 							class="form-control" required autofocus id="username"
 							name="username">
 						<!-- 
@@ -19,14 +19,14 @@
 				 -->
 					</div>
 					<div class="form-group">
-						<label for="password">Password</label> <input type="password"
+						<label for="password" th:text="#{text.login.password}">Password</label> <input type="password"
 							class="form-control" required id="password" name="password">
 
 						<!-- 
-				<small th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="form-text text-danger"></small>
-				 -->
+								<small th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="form-text text-danger"></small>
+				 		-->
 					</div>
-					<button type="submit" class="btn btn-primary btn-block">Sign
+					<button type="submit" class="btn btn-primary btn-block" th:text="#{text.login.button}">Sign
 						In!</button>
 				</form>
 			</div>

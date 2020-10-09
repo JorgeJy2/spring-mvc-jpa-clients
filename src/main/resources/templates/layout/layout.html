@@ -26,16 +26,16 @@
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="nav navbar-nav mr-auto">
 					<li class="nav-item active"><a class="nav-link"
-						th:href="@{/list}">Home <span class="sr-only">(current)</span>
+						th:href="@{/list}" th:text="#{text.title.home}">Home <span class="sr-only">(current)</span>
 					</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/list}">Clients</a>
+					<li class="nav-item"><a class="nav-link" th:href="@{/list}" th:text="#{text.title.customer}">Clients</a>
 					</li>
 					<li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item"><a
 						class="nav-link" th:href="@{/form}">Create client</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li sec:authorize="! isAuthenticated()"><a
-						class="btn btn-outline-primary" th:href="@{/login}">Sign in</a></li>
+						class="btn btn-outline-primary" th:href="@{/login}" th:text="#{text.login.button}">Sign in</a></li>
 
 					<li sec:authorize="isAuthenticated()" class="dropdown"><a
 						class="btn btn-secondary dropdown-toggle" href="#" role="button"
@@ -47,6 +47,7 @@
 							<form id="logout-form" th:action="@{/logout}" method="post">
 								<button class="dropdown-item"
 									onclick="document.getElementById('logout-form').submit();"
+									th:text="#{text.login.signOut}"
 									type="submit">Sign Out</button>
 
 							</form>
@@ -100,7 +101,7 @@
 					sec:authentication="principal.authorities">Roles</span>
 			</p>
 
-			2020 - Spring MVC JPA: <a href="#"> JorgeJy2</a>
+			2020 - Spring MVC JPA: <a href="https://github.com/jorgejy2" target="_blank"> JorgeJy2</a>
 		</div>
 		<!-- Copyright -->
 
